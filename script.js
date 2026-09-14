@@ -190,6 +190,7 @@ const allowedApps = {
     x: "https://x.com",
     twitter: "https://twitter.com",
     linkedin: "https://www.linkedin.com",
+    linked_in: "https://www.linkedin.com",
     reddit: "https://www.reddit.com",
     pinterest: "https://www.pinterest.com",
     tumblr: "https://www.tumblr.com",
@@ -491,17 +492,20 @@ runBtn.onclick = () => {
         window.open(`https://www.youtube.com/results?search_query=${encodeURIComponent(promptPlay)}+song`, '_blank')
     }
     else if (catagory === 'open') {
-        const application = desktopApps[promptOpen.replace('open', '')];
-        if (application) {
-            alert(`Failed to open ${application} due to system security please open it manually!`);
+        const applicationA = desktopApps[promptOpen.replace('open', '').trim()]
+        const applicationB = allowedApps[promptOpen.replace('open', '').replace(' ', '_')];
+        console.log(applicationB)
+        if (applicationA) {
+            alert(`Failed to open ${applicationA} due to system security please open it manually!`);
             return;
-        } else if (!application) {
+        } else if (!applicationB) {
             alert("Its seems application name doesn't exists in our database.Please try with correct name!");
             return;
+        } else {
+            window.open(`${applicationB}`, '_blank');
+            getPromptbar.value = '';
         }
-        const finalOpeningThing = allowedApps[promptOpen.replaceAll(' ', '_')];
-        window.open(`${finalOpeningThing}`, '_blank');
-        getPromptbar.value = '';
+
     }
 
     getPromptbar.value = '';
