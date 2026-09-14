@@ -477,7 +477,7 @@ runBtn.onclick = () => {
         return;
     }
     if (catagory !== '' && promptsearch === '') {
-        alert('Enter task..!');
+        alert('Enter task!');
         return;
     }
     if (catagory === 'search') {
