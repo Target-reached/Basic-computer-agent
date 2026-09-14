@@ -5,7 +5,7 @@ const categoryO = document.querySelector('.open');
 const runBtn = document.querySelector('.make-it-btn');
 
 const introLine = document.querySelector('.intro');
-const smartIntro ="Hey, I'm Auren. Your personal agent...";
+const smartIntro = "Hey, I'm Your Personal Agent...";
 let travellor = 0;
 
 let smartWritter = setInterval(() => {
@@ -33,6 +33,36 @@ aboutBtn.onclick = () => {
 helpBtn.onclick = () => {
     unselectPage(helpPAge, helpBtn);
 }
+
+
+function createHistoriRecord(title) {
+    const taskName = document.createElement('p');
+    taskName.textContent = `Searched for : ${title}`;
+    return taskName;
+}
+
+const historyNotes = document.querySelector('.history_box');
+//local storage
+let history = [];
+function historyNote(dataBase) {
+    localStorage.setItem('historyRecord', JSON.stringify(dataBase));
+}
+function gethistory() {
+    history = JSON.parse(localStorage.getItem('historyRecord')) || [];
+    return history;
+}
+
+gethistory();
+const hirstoryBox = document.querySelector('.history');
+if (history.length === 0) {
+    hirstoryBox.style.visibility = 'hidden';
+
+}
+history.forEach(history => {
+    const taskname = createHistoriRecord(history);
+    historyNotes.prepend(taskname);
+});
+console.log(history)
 function unselectPage(page, button) {
     homePage.classList.add('display_none');
     aboutPage.classList.add('display_none');
@@ -468,8 +498,10 @@ function openApp(app) {
 }
 
 
+
+
 runBtn.onclick = () => {
-    const promptsearch = getPromptbar.value.trim().toLowerCase();
+    const promptsearch = getPromptbar.value.trim().toLowerCase().replace('search', '').trim().replace('open', '').trim();
     const promptPlay = promptsearch.replace('play', '').trim().toLowerCase();
     const promptOpen = promptsearch.replace('open', '').trim().toLowerCase();
     if (catagory === '' && promptsearch === '') {
@@ -477,9 +509,10 @@ runBtn.onclick = () => {
         return;
     }
     if (catagory !== '' && promptsearch === '') {
-        alert('Enter task!');
+        alert('Enter task..!');
         return;
     }
+    const makeNote = createHistoriRecord(getPromptbar.value.trim());
     if (catagory === 'search') {
         if ((promptsearch.includes('sex')) || (promptsearch.includes('sexy')) || (promptsearch.includes('xxx'))) {
             alert('Please use appropriate search terms!');
@@ -489,12 +522,12 @@ runBtn.onclick = () => {
         window.open(`https://www.google.com/search?q=${promptsearch}`, '_blank');
     }
     else if (catagory === 'play') {
+
         window.open(`https://www.youtube.com/results?search_query=${encodeURIComponent(promptPlay)}+song`, '_blank')
     }
     else if (catagory === 'open') {
         const applicationA = desktopApps[promptOpen.replace('open', '').trim()]
         const applicationB = allowedApps[promptOpen.replace('open', '').replace(' ', '_')];
-        console.log(applicationB)
         if (applicationA) {
             alert(`Failed to open ${applicationA} due to system security please open it manually!`);
             return;
@@ -508,6 +541,24 @@ runBtn.onclick = () => {
 
     }
 
+    history.push(getPromptbar.value.trim());
+    console.log(history)
+    console.log(history);
+    historyNote(history);
+    gethistory();
+    historyNotes.prepend(makeNote);
+    hirstoryBox.style.visibility = 'visible';
     getPromptbar.value = '';
+
 }
 
+const clearHistory = document.querySelector('.clear');
+clearHistory.onclick = () => {
+    const confirmAction = confirm('This action will wipes yout history,continue?');
+    if (!confirmAction) {
+        return;
+    }
+    localStorage.removeItem('historyRecord');
+    window.location.reload();
+}
+// localStorage.clear();
