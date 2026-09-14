@@ -5,7 +5,7 @@ const categoryO = document.querySelector('.open');
 const runBtn = document.querySelector('.make-it-btn');
 
 const introLine = document.querySelector('.intro');
-const smartIntro = "Hey, I'm Your Personal Agent...";
+const smartIntro ="Hey, I'm Auren. Your personal agent...";
 let travellor = 0;
 
 let smartWritter = setInterval(() => {
